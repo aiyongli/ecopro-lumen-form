@@ -1,0 +1,21 @@
+{
+    "name": "aiyongli/ecopro-lumen-form",
+    "description": "ecopro php lumen form library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "liaiyong",
+            "email": "aiyong.li@ecoprobio.cn"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Ecopro\\Form\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Ecopro\\Form\\Tests\\": "tests/"
+        }
+    }
+}
