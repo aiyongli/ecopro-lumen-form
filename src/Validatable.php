@@ -7,5 +7,9 @@ namespace Ecopro\Form;
  */
 interface Validatable
 {
-    public function validate($base_message = '');
+    /**
+     * @return static
+     */
+    public function init($attrs = []);
+    public function validate($base_message = null);
 }

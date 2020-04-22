@@ -17,5 +17,10 @@
         "psr-4": {
             "Ecopro\\Form\\Tests\\": "tests/"
         }
+    },
+    "require": {
+        "doctrine/annotations": "^1.10",
+        "doctrine/cache": "^1.10",
+        "symfony/validator": "^4.3"
     }
 }

@@ -1,42 +1,42 @@
 <?php
 namespace Ecopro\Form\Concerns;
 
-use Ecopro\Form\Validator;
+use Ecopro\Form\Validatable;
 
 trait Validate
 {
+    use ValidateDated;
+
+    /**
+     * @return static
+     */
+    public function init($attrs = [])
+    {
+        foreach ($attrs as $key => $value) {
+            $this->$key = $value;
+        }
+
+        return $this;
+    }
+
     /**
      * 表单检验
      */
-    public function validate($base_message = '400|错误请求信息(%s)')
+    public function validate($base_message = null)
     {
         $errors = [];
-
-        $reflectionClass = new \ReflectionClass($this);
-        $props = $reflectionClass->getProperties(\ReflectionProperty::IS_PROTECTED);
-        $validator = app(Validator::class);
-        try{
-            foreach($props as $prop){
-                $prop->setAccessible(true);
-                $comment =  $prop->getDocComment();
-                preg_match_all('/@(.+)[\r|\n]/i', $comment, $matches);
-                $elements = end($matches);
-                foreach($elements as $element){
-                    preg_match('/(.+)(?:\()/i', $element, $match);
-                    $method = end($match);
-                    $method = lcfirst($method);
-                    $result = $validator->$method($element, $prop->getValue($this));
-                    if($result) {
-                        $errors[] = $result;
-                        break 2;
-                    }
-                }
+        $base_message = $base_message ?? '400|错误请求信息(%s)';
+        if(method_exists($this, 'validateSymfony')) {
+            // 优先使用Symfony注解验证
+            $violations = $this->validateSymfony();
+            foreach ($violations as $violation) {
+                $errors[] = $violation->getMessage();
+                // 只一条
+                break;
             }
-        } catch (\Exception $e) {
-            $message = $e->getMessage();
-            $errMessage = substr($message, strrpos($message,':') + 1);
-
-            throw new \Exception('注解异常@' . $errMessage);
+        } else {
+            // 没有使用新特性
+            $errors = $this->validateDated();
         }
 
         return count($errors) ? sprintf($base_message, implode(',', $errors)) : '';

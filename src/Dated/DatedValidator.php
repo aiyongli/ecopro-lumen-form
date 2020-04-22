@@ -1,13 +1,13 @@
 <?php
 
-namespace Ecopro\Form;
+namespace Ecopro\Form\Dated;
 
 use Illuminate\Http\UploadedFile;
 
 /**
  * 验证器
  */
-class Validator
+class DatedValidator
 {
     /**
      * 不允许内容为空
