@@ -34,9 +34,23 @@ trait ValidateSymfony
     }
 
     /**
+     * 设置验证器
+     * @param ValidatorInterface $symfonyValidator
      * @return static
      */
-    public function setSymfonyConstraints($constraints, $groups = null)
+    public function setSymfonyValidator(ValidatorInterface $symfonyValidator)
+    {
+        $this->symfonyValidator =  $symfonyValidator;
+
+        return $this;
+    }
+
+    /**
+     * @param Constraint|Constraint[]|null $constraints
+     * @param string|GroupSequence|(string|GroupSequence)[]|null $groups
+     * @return static
+     */
+    public function setSymfonyConstraints($constraints = null, $groups = null)
     {
         $this->symfonyConstraints = $constraints;
         $this->symfonyGroups = $groups;

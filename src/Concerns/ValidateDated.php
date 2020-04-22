@@ -6,13 +6,41 @@ use Ecopro\Form\Dated\DatedValidator;
 trait ValidateDated
 {
     /**
+     * @var object
+     */
+    protected $datedValidator;
+
+    /**
+     * 默认使用注解验证
+     * @return object
+     */
+    public function getDatedValidator()
+    {
+        $this->datedValidator =  $this->datedValidator ?? new DatedValidator;
+
+        return $this->datedValidator;
+    }
+
+    /**
+     * 设置验证器
+     * @param object $datedValidator
+     * @return static
+     */
+    public function setDatedValidator($datedValidator)
+    {
+        $this->datedValidator =  $datedValidator;
+
+        return $this;
+    }
+
+    /**
      * 表单检验
      */
     public function validateDated()
     {
         $reflectionClass = new \ReflectionClass($this);
         $props = $reflectionClass->getProperties(\ReflectionProperty::IS_PROTECTED);
-        $validator = app(DatedValidator::class);
+        $validator = $this->getDatedValidator();
         try{
             foreach($props as $prop) {
                 $prop->setAccessible(true);
